@@ -14,10 +14,14 @@ class Ship():
         self.rect.bottom = self.screen_rect.bottom            # La coordenada rect y de la parte inferior de la nave la igualamos a la coordenada rect y de la parte inferior de la pantalla
 
         self.movingRight = False                              # Bandera de movimiento de la nave hacia la derecha
+        self.movingLeft = False                               # Bandera de movimiento de la nave hacia la izquierda
 
     def update(self):                                         # Actualiza la posicion de la nave acorde  al bandera de movimiento
         if self.movingRight:                                  # Verificamos si la bandera de movimiento a la derecha se encuentra activa
             self.rect.centerx += 1                            # Si la bandera de movimiento a la derecha se encuentra activa -> sumamos 1 a la posicion actual de la nave
+        
+        if self.movingLeft:                                   # Verificamos si la bandera de movimiento a la izquierda se encuentra activa
+            self.rect.centerx -= 1                            # Si la bandera de movimiento a la izquierda se encuentra activa -> restamos 1 a la posicion actual de la nave
 
     def blitme(self):                                         # Metodo para posicionar la nave en su posicion actual
         self.screen.blit(self.image, self.rect)               # Posiciona la imagen en la pantalla para visualizarla
