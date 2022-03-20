@@ -14,16 +14,10 @@ def run_game():                                                                 
     pygame.display.set_caption("Invasión Alienígena")                                       # Asignamos el titulo de la ventana
 
     ship = Ship(screen)                                                                     # Creamos una nave en pantalla
-
     bg_color = (settings.bg_color)                                                          # Creamos una variable para establecer el color de fondo en la pantalla
 
     while True:                                                                             # Bucle de activacion de juego
-        
         gameFunctions.checkEvents()                                                         # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
-
-        screen.fill(bg_color)                                                               # Dibujamos la pantalla en cada ciclo asignando el color de fondo
-        ship.blitme()                                                                       # Dibujamos la nave en pantalla
-        
-        pygame.display.flip()                                                               # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
+        gameFunctions.refreshScreen(settings, screen, ship)                                 # Actualizamos las imagenes en pantalla durante la ejecucion
 
 run_game()                                                                                  # Ejecutamos el metodo que inicializa el juego
