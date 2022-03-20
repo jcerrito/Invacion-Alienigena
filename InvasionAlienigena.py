@@ -3,6 +3,7 @@ import sys
 import pygame
 
 from Settings import Settings
+from Ship import Ship
 
 def run_game():                                                                             # Definimos el metodo que inicializa el juego, las configuraciones y el objeto screen
     pygame.init()                                                                           # Inicializa la configuracion de pygame
@@ -10,6 +11,8 @@ def run_game():                                                                 
     
     screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))       # Creamos la pantalla de visualizacion indicando en pixeles el ancho y el alto
     pygame.display.set_caption("Invasión Alienígena")                                       # Asignamos el titulo de la ventana
+
+    ship = Ship(screen)                                                                     # Creamos una nave en pantalla
 
     bg_color = (settings.bg_color)                                                          # Creamos una variable para establecer el color de fondo en la pantalla
 
@@ -20,6 +23,7 @@ def run_game():                                                                 
                 sys.exit()                                                                  # Se cierra todo proceso y termina el juego
 
         screen.fill(bg_color)                                                               # Dibujamos la pantalla en cada ciclo asignando el color de fondo
+        ship.blitme()                                                                       # Dibujamos la nave en pantalla
         
         pygame.display.flip()                                                               # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
 
