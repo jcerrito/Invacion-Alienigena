@@ -13,7 +13,7 @@ def run_game():                                                                 
     screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))       # Creamos la pantalla de visualizacion indicando en pixeles el ancho y el alto
     pygame.display.set_caption("Invasión Alienígena")                                       # Asignamos el titulo de la ventana
 
-    ship = Ship(screen)                                                                     # Creamos una nave en pantalla
+    ship = Ship(settings, screen)                                                                     # Creamos una nave en pantalla
     bg_color = (settings.bg_color)                                                          # Creamos una variable para establecer el color de fondo en la pantalla
 
     while True:                                                                             # Bucle de activacion de juego
