@@ -1,9 +1,10 @@
 from asyncio import run
-import sys
-import pygame
 
-from Settings import Settings
-from Ship import Ship
+import pygame
+import GameFunctions as gameFunctions                                                       # Importamos GameFunctions y sus funciones las guardamos en una variable
+
+from Settings import Settings                                                               # Del archivo Settings importamos la clase Settings
+from Ship import Ship                                                                       # Del archivo Ship importamos la clase Ship
 
 def run_game():                                                                             # Definimos el metodo que inicializa el juego, las configuraciones y el objeto screen
     pygame.init()                                                                           # Inicializa la configuracion de pygame
@@ -18,9 +19,7 @@ def run_game():                                                                 
 
     while True:                                                                             # Bucle de activacion de juego
         
-        for event in pygame.event.get():                                                    # Ciclo de eventos para controlar el juego
-            if event.type == pygame.QUIT:                                                   # Si el usuario da click en el boton de cierre de la ventana
-                sys.exit()                                                                  # Se cierra todo proceso y termina el juego
+        gameFunctions.checkEvents()                                                         # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
 
         screen.fill(bg_color)                                                               # Dibujamos la pantalla en cada ciclo asignando el color de fondo
         ship.blitme()                                                                       # Dibujamos la nave en pantalla
