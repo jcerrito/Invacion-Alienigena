@@ -17,7 +17,8 @@ def run_game():                                                                 
     bg_color = (settings.bg_color)                                                          # Creamos una variable para establecer el color de fondo en la pantalla
 
     while True:                                                                             # Bucle de activacion de juego
-        gameFunctions.checkEvents()                                                         # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
+        gameFunctions.checkEvents(ship)                                                     # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
+        ship.update()
         gameFunctions.refreshScreen(settings, screen, ship)                                 # Actualizamos las imagenes en pantalla durante la ejecucion
 
 run_game()                                                                                  # Ejecutamos el metodo que inicializa el juego
