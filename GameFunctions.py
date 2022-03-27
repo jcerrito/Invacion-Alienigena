@@ -1,3 +1,4 @@
+from operator import length_hint
 import sys
 import pygame
 from Bullet import Bullet                                          # Importamos la clase Bullet
@@ -8,8 +9,9 @@ def checkKeydownEvents(event, settings, screen, ship, bullets):    # Responde a 
     elif event.key == pygame.K_LEFT:                               # Verificamos si la tecla presionada es: flecha a la izquierda
         ship.movingLeft = True                                     # Si se cumple la condicion anterior la bandera de movimiento a la izquierda se activa
     elif event.key == pygame.K_SPACE:                              # Verificamos si la tecla presionada es: tecla espacio
-        newBullet = Bullet(settings, screen, ship)                 # Creamos una nueva bala
-        bullets.add(newBullet)                                     # Agregamos las balas a la pantalla
+        if len(bullets) < settings.bulletsAllowed:                 # 
+            newBullet = Bullet(settings, screen, ship)             # Creamos una nueva bala
+            bullets.add(newBullet)                                 # Agregamos las balas a la pantalla
 
 def checkKeyupEvents(event, ship):                                 # Detecta si se deja de presionar una tecla
     if event.key == pygame.K_RIGHT:                                # Verificamos si la tecla que se soltó es la tecla de flecha derecha
@@ -36,3 +38,10 @@ def refreshScreen(settings, screen, ship, bullets):                # Metodo que 
 
     ship.blitme()                                                  # Dibujamos la nave en pantalla   
     pygame.display.flip()                                          # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
+
+def updateBullets(bullets):                                        # Actualiza la posicion de las balas en pantalla y elimina las que salen de esta
+    bullets.update()                                               # Actualizamos los valores para cada bala durante la ejecucion
+        
+    for bullet in bullets.copy():                                  # Checamos cada una de las balas disparadas
+        if bullet.rect.bottom <= 0:                                # Verificamos si la posicion de la bala con respecto a la pantalla alcanza un valor cero
+            bullets.remove(bullet)                                 # Si la condicion anterior se cumple, removemos la bala antes de que salga de pantalla

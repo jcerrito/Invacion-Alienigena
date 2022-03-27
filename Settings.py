@@ -14,3 +14,4 @@ class Settings():
         self.bulletWidth = 3                              # Ancho de la bala en pixeles con respecto a la pantalla
         self.bulletHeight = 15                            # Largo de la bala en pixeles con respecto a la pantalla
         self.bulletColor = 60, 60, 60                     # Color que tendra la bala al momento de la ejecucion (RGB)
+        self.bulletsAllowed = 3                           # Limitamos las balas a 3
