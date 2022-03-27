@@ -8,3 +8,9 @@ class Settings():
         
         """ Configuraciones de la Nave """
         self.shipSpeedFactor = 1.5                        # Configuramos en 1.5 pixeles la velocidad de movimiento de la nave
+
+        """ Configuraciones de las balas """
+        self.speedFactorBullet = 1                        # Velocidad con la que se movera la bala
+        self.bulletWidht = 3                              # Ancho de la bala en pixeles con respecto a la pantalla
+        self.bulletHeight = 15                            # Largo de la bala en pixeles con respecto a la pantalla
+        self.bulletColor = 60, 60, 60                     # Color que tendra la bala al momento de la ejecucion (RGB)
