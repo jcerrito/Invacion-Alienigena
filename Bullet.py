@@ -19,4 +19,5 @@ class Bullet(Sprite):
         self.y -= self.speedFactor                                                     # Actualiza la posicion decimal de la bala
         self.rect.y = self.y                                                           # Actualiza la posicion de los pixeles en pantalla
 
-    
+    def drawBullet(self):                                                              # Dibuja la bala en la pantalla
+        pygame.draw.rect(self.screen, self.color, self.rect)                           # Se muestra en pantalla la bala con el color, tamaño y posicion configurados
