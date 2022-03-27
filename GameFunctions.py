@@ -9,9 +9,7 @@ def checkKeydownEvents(event, settings, screen, ship, bullets):    # Responde a 
     elif event.key == pygame.K_LEFT:                               # Verificamos si la tecla presionada es: flecha a la izquierda
         ship.movingLeft = True                                     # Si se cumple la condicion anterior la bandera de movimiento a la izquierda se activa
     elif event.key == pygame.K_SPACE:                              # Verificamos si la tecla presionada es: tecla espacio
-        if len(bullets) < settings.bulletsAllowed:                 # 
-            newBullet = Bullet(settings, screen, ship)             # Creamos una nueva bala
-            bullets.add(newBullet)                                 # Agregamos las balas a la pantalla
+        fireBullet(settings, screen, ship, bullets)                # Disparamos una bala si aun no se supera el limite
 
 def checkKeyupEvents(event, ship):                                 # Detecta si se deja de presionar una tecla
     if event.key == pygame.K_RIGHT:                                # Verificamos si la tecla que se soltó es la tecla de flecha derecha
@@ -45,3 +43,8 @@ def updateBullets(bullets):                                        # Actualiza l
     for bullet in bullets.copy():                                  # Checamos cada una de las balas disparadas
         if bullet.rect.bottom <= 0:                                # Verificamos si la posicion de la bala con respecto a la pantalla alcanza un valor cero
             bullets.remove(bullet)                                 # Si la condicion anterior se cumple, removemos la bala antes de que salga de pantalla
+
+def fireBullet(settings, screen, ship, bullets):                   # Dispara una bala si no ha alcanzado el limte
+    if len(bullets) < settings.bulletsAllowed:                     # Si el numero de balas disparadas es menor al permitido
+        newBullet = Bullet(settings, screen, ship)                 # Creamos una nueva bala
+        bullets.add(newBullet)                                     # Agregamos las balas a la pantalla
