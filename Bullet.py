@@ -15,4 +15,8 @@ class Bullet(Sprite):
         self.color = settings.bulletColor                                              # Asignamos el color de la bala desde las configuraciones
         self.speedFactor = settings.speedFactorBullet                                  # Asignamos la velocidad de la bala desde las configuraciones
     
+    def update(self):                                                                  # Actualiza la posicion de la bala en la pantalla
+        self.y -= self.speedFactor                                                     # Actualiza la posicion decimal de la bala
+        self.rect.y = self.y                                                           # Actualiza la posicion de los pixeles en pantalla
+
     

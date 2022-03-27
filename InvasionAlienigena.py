@@ -1,5 +1,3 @@
-from asyncio import run
-
 import pygame
 import GameFunctions as gameFunctions                                                       # Importamos GameFunctions y sus funciones las guardamos en una variable
 
