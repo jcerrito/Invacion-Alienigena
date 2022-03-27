@@ -11,6 +11,6 @@ class Settings():
 
         """ Configuraciones de las balas """
         self.speedFactorBullet = 1                        # Velocidad con la que se movera la bala
-        self.bulletWidht = 3                              # Ancho de la bala en pixeles con respecto a la pantalla
+        self.bulletWidth = 3                              # Ancho de la bala en pixeles con respecto a la pantalla
         self.bulletHeight = 15                            # Largo de la bala en pixeles con respecto a la pantalla
         self.bulletColor = 60, 60, 60                     # Color que tendra la bala al momento de la ejecucion (RGB)
