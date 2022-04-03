@@ -10,6 +10,8 @@ def checkKeydownEvents(event, settings, screen, ship, bullets):    # Responde a 
         ship.movingLeft = True                                     # Si se cumple la condicion anterior la bandera de movimiento a la izquierda se activa
     elif event.key == pygame.K_SPACE:                              # Verificamos si la tecla presionada es: tecla espacio
         fireBullet(settings, screen, ship, bullets)                # Disparamos una bala si aun no se supera el limite
+    elif event.key == pygame.K_q:                                  # Verificamos si la tecla presionada es: tecla q
+        sys.exit()                                                 # Cerramos todos los procesos del juego que se encuentren ejecutando
 
 def checkKeyupEvents(event, ship):                                 # Detecta si se deja de presionar una tecla
     if event.key == pygame.K_RIGHT:                                # Verificamos si la tecla que se soltó es la tecla de flecha derecha
