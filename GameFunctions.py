@@ -30,13 +30,14 @@ def checkEvents(settings, screen, ship, bullets):                  # Metodo para
         elif event.type == pygame.KEYUP:                           # Verificamos si la tecla presionada ha sido soltada
             checkKeyupEvents(event, ship)                          # Detiene la accion ejecutada por la tecla presionada
 
-def refreshScreen(settings, screen, ship, bullets):                # Metodo que actualiza las imagenes en la pantalla durante la ejecución
+def refreshScreen(settings, screen, ship, alien, bullets):         # Metodo que actualiza las imagenes en la pantalla durante la ejecución
     screen.fill(settings.bg_color)                                 # Dibujamos la pantalla en cada ciclo asignando el color de fondo
     
     for bullet in bullets.sprites():                               # Obtenemos todas las balas que han sido disparadas
         bullet.drawBullet()                                        # Dibujamos cada una de estas balas en la pantalla
 
-    ship.blitme()                                                  # Dibujamos la nave en pantalla   
+    ship.blitme()                                                  # Dibujamos la nave en pantalla
+    alien.blitMe()                                                 # Dibujamos un alien en pantalla
     pygame.display.flip()                                          # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
 
 def updateBullets(bullets):                                        # Actualiza la posicion de las balas en pantalla y elimina las que salen de esta

@@ -4,6 +4,7 @@ import GameFunctions as gameFunctions                                           
 
 from Settings import Settings                                                               # Del archivo Settings importamos la clase Settings
 from Ship import Ship                                                                       # Del archivo Ship importamos la clase Ship
+from Alien import Alien                                                                     # Del archivo Alien importamos las clase Alien
 
 def run_game():                                                                             # Definimos el metodo que inicializa el juego, las configuraciones y el objeto screen
     pygame.init()                                                                           # Inicializa la configuracion de pygame
@@ -14,12 +15,13 @@ def run_game():                                                                 
 
     ship = Ship(settings, screen)                                                           # Creamos una nave en pantalla
     bullets = Group()                                                                       # Grupo para almacenas lar las balas
+    alien = Alien(settings, screen)                                                         # Creamos un alien en pantalla
     bg_color = (settings.bg_color)                                                          # Creamos una variable para establecer el color de fondo en la pantalla
 
     while True:                                                                             # Bucle de activacion de juego
         gameFunctions.checkEvents(settings, screen, ship, bullets)                          # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
         ship.update()                                                                       # Actualizamos los valores de la nave durante la ejecucion
         gameFunctions.updateBullets(bullets)                                                # Actualizamos las balas disparadas con respecto a la pantalla
-        gameFunctions.refreshScreen(settings, screen, ship, bullets)                        # Actualizamos las imagenes en pantalla durante la ejecucion
+        gameFunctions.refreshScreen(settings, screen, ship, alien, bullets)                 # Actualizamos las imagenes en pantalla durante la ejecucion
 
 run_game()                                                                                  # Ejecutamos el metodo que inicializa el juego
