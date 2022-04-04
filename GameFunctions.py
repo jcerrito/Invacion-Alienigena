@@ -1,7 +1,7 @@
-from operator import length_hint
 import sys
 import pygame
 from Bullet import Bullet                                          # Importamos la clase Bullet
+from Alien import Alien                                            # Importamos la clase Alien
 
 def checkKeydownEvents(event, settings, screen, ship, bullets):    # Responde a las pulsaciones de la teclas
     if event.key == pygame.K_RIGHT:                                # Comparamos el evento con la tecla de flecha derecha
@@ -30,14 +30,14 @@ def checkEvents(settings, screen, ship, bullets):                  # Metodo para
         elif event.type == pygame.KEYUP:                           # Verificamos si la tecla presionada ha sido soltada
             checkKeyupEvents(event, ship)                          # Detiene la accion ejecutada por la tecla presionada
 
-def refreshScreen(settings, screen, ship, alien, bullets):         # Metodo que actualiza las imagenes en la pantalla durante la ejecución
+def refreshScreen(settings, screen, ship, aliens, bullets):        # Metodo que actualiza las imagenes en la pantalla durante la ejecución
     screen.fill(settings.bg_color)                                 # Dibujamos la pantalla en cada ciclo asignando el color de fondo
     
     for bullet in bullets.sprites():                               # Obtenemos todas las balas que han sido disparadas
         bullet.drawBullet()                                        # Dibujamos cada una de estas balas en la pantalla
 
     ship.blitme()                                                  # Dibujamos la nave en pantalla
-    alien.blitMe()                                                 # Dibujamos un alien en pantalla
+    aliens.draw(screen)                                            # Dibujamos cada uno de los aliens en pantalla
     pygame.display.flip()                                          # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
 
 def updateBullets(bullets):                                        # Actualiza la posicion de las balas en pantalla y elimina las que salen de esta
@@ -51,3 +51,15 @@ def fireBullet(settings, screen, ship, bullets):                   # Dispara una
     if len(bullets) < settings.bulletsAllowed:                     # Si el numero de balas disparadas es menor al permitido
         newBullet = Bullet(settings, screen, ship)                 # Creamos una nueva bala
         bullets.add(newBullet)                                     # Agregamos las balas a la pantalla
+
+def createFleet(settings, screen, aliens):                         # Crea una flota completa de aliens
+    alien = Alien(settings, screen)                                # Creamos un nuevo alien
+    alienWidth = alien.rect.width                                  # Asignamos el ancho de la imagen del alien
+    availableSpaceX = settings.screen_width - 2 * alienWidth       # Calculamos el espacio disponible del eje x en pantalla
+    aliensNumberX = int(availableSpaceX / (2 * alienWidth))        # Calculamos cuantas naves caben dentro a lo ancho de la pantalla
+
+    for aliensNumber in range(aliensNumberX):                      # Creamos la primera fila de aliens
+        newAlien = Alien(settings, screen)                         # Se crea cada uno de los aliens para asignar su posicion en la fila
+        newAlien.x = alienWidth + 2 * alienWidth * aliensNumber    # Calculamos con la posicion en x de cada alien en pantalla
+        newAlien.rect.x = newAlien.x
+        aliens.add(newAlien)                                       # Agregamos cada una de las posiciones al grupo de aliens

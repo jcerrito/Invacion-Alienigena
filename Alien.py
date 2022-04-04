@@ -9,8 +9,8 @@ class Alien(Sprite):                                               # Clase para 
         self.screen = screen                                       # Recibimos los valores de la pantalla de ejecucion
         self.settings = settings                                   # Recibimos los valores de la configacion general del juego
         
-        self.alienImage = pygame.image.load("images/alien.bmp")    # Cargamos la imagen del alien a una variable para posteriormente mostrarla en pantalla
-        self.rect = self.alienImage.get_rect()                     # Guardamos la imagen como un cuadro de pixeles
+        self.image = pygame.image.load("images/alien.bmp")         # Cargamos la imagen del alien a una variable para posteriormente mostrarla en pantalla
+        self.rect = self.image.get_rect()                          # Guardamos la imagen como un cuadro de pixeles
         
         self.rect.x = self.rect.width                              # Preparamos la coordenada x para mostrar el alien en pantalla
         self.rect.y = self.rect.height                             # Preparamos la coordenada y para mostrar el alien en pantalla
