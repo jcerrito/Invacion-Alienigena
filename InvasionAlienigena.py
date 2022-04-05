@@ -1,27 +1,40 @@
 import pygame
 from pygame.sprite import Group
-import GameFunctions as gameFunctions                                                       # Importamos GameFunctions y sus funciones las guardamos en una variable
+# Importaciones de las configuraciones
+from Settings import Configuraciones
+# Importamos el eva
+from Ship import Nave
+# Importar funciones_juego
+import GameFunctions as fj
 
-from Settings import Settings                                                               # Del archivo Settings importamos la clase Settings
-from Ship import Ship                                                                       # Del archivo Ship importamos la clase Ship
 
-def run_game():                                                                             # Definimos el metodo que inicializa el juego, las configuraciones y el objeto screen
-    pygame.init()                                                                           # Inicializa la configuracion de pygame
-    settings = Settings()                                                                   # Settings nos permite importar las configuraciones del juego
-    
-    screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))       # Creamos la pantalla de visualizacion indicando en pixeles el ancho y el alto
-    pygame.display.set_caption("Invasión Alienígena")                                       # Asignamos el titulo de la ventana
+def run_game():
+    # Se inicializa el juego y se crea un objeto pantalla
+    pygame.init()
+    configuraciones = Configuraciones()
+    pantalla = pygame.display.set_mode(
+        (configuraciones.screen_width, configuraciones.screen_height))
+    pygame.display.set_caption("Ataque Alienigena", "image/nave.png")
 
-    ship = Ship(settings, screen)                                                           # Creamos una nave en pantalla
-    bullets = Group()                                                                       # Grupo para almacenas lar las balas
-    aliens = Group()                                                                        # Creamos un grupo para almacenar los aliens
+    # se crea un nueva nave
+    nave = Nave(configuraciones, pantalla)
 
-    gameFunctions.createFleet(settings, screen, aliens)                                     # Creamos una flota de aliens
+    # Crea un grupo para almacenar las balas
+    balas = Group()
+    # crea un grupo de aliens
+    aliens = Group()
+    # crea la flota de alienigenas
+    fj.crear_flota(configuraciones, pantalla, aliens)
+    fondo = pygame.image.load("images/fondo.jpg").convert()
 
-    while True:                                                                             # Bucle de activacion de juego
-        gameFunctions.checkEvents(settings, screen, ship, bullets)                          # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
-        ship.update()                                                                       # Actualizamos los valores de la nave durante la ejecucion
-        gameFunctions.updateBullets(bullets)                                                # Actualizamos las balas disparadas con respecto a la pantalla
-        gameFunctions.refreshScreen(settings, screen, ship, aliens, bullets)                # Actualizamos las imagenes en pantalla durante la ejecucion
+    # Se inicia el bucle principal del juego
+    while True:
+        fj.verificar_eventos(configuraciones, pantalla, nave, balas)
+        nave.update()
+        # desghace las balas que han desaparecido
+        balas.update()
+        fj.update_balas(balas)
+        fj.actualizar_pantalla(fondo, pantalla, nave, aliens, balas)
 
-run_game()                                                                                  # Ejecutamos el metodo que inicializa el juego
+
+run_game()

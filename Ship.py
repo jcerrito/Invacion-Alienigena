@@ -1,33 +1,34 @@
 import pygame
 
-class Ship():
-    """ Clase para controlar el comportamienot de la nave """
 
-    def __init__(self, settings, screen):                                   # Metodo encargado de inicializar la nave y establecer la posicion de inicio
-        self.screen = screen
-        self.settings = settings                                            # Con la variable settings podemos hacer uso de las configuraciones
+class Nave:
+    def __init__(self, configuraciones, pantalla):
+        # Inicializa la nave y estable su posicion de partida
+        self.pantalla = pantalla
+        self.configuracones = configuraciones
+        # Carga la imagen de la nave y obtiene su rect
+        self.imagen = pygame.image.load("images/nave.png")
+        self.rect = self.imagen.get_rect()
+        self.pantalla_rect = pantalla.get_rect()
 
-        self.image = pygame.image.load("images/ship.bmp")                   # Cargamos la imagen de la nave
-        self.rect = self.image.get_rect()                                   # Obtenemos el rect de la superficie para mostrar la nave
-        self.screen_rect = screen.get_rect()                                # Obtenemos el rect de la pantalla
+        # Empiza carda nueva nave empieza en la parte izquierda central de la pantalla
+        self.rect.centery = self.pantalla_rect.centery
+        self.rect.left = self.pantalla_rect.left
 
-        self.rect.centerx = self.screen_rect.centerx                        # La coordenada rect x del centro de la nave la igualamos a la coordenada rect x del centro de la pantalla
-        self.rect.bottom = self.screen_rect.bottom                          # La coordenada rect y de la parte inferior de la nave la igualamos a la coordenada rect y de la parte inferior de la pantalla
+        # Almacena un valor decimal para el centro de la nave
+        self.center = float(self.rect.centery)
+        # Banderas de movimiento
+        self.moving_up = False
+        self.moving_down = False
 
-        self.center = float(self.rect.centerx)                              # Almacenamos un valor decimal para el centro de la nave
+    def update(self):
+        # actualiza la posicion de la nave segun la bandera de movimiento
+        if self.moving_up and self.rect.top > 0:
+            self.center -= self.configuracones.factor_velocidad_nave
+        if self.moving_down and self.rect.bottom < self.pantalla_rect.bottom:
+            self.center += self.configuracones.factor_velocidad_nave
+        self.rect.centery = self.center
 
-        self.movingRight = False                                            # Bandera de movimiento de la nave hacia la derecha
-        self.movingLeft = False                                             # Bandera de movimiento de la nave hacia la izquierda
-
-    def update(self):                                                       # Actualiza la posicion de la nave acorde  al bandera de movimiento
-        if self.movingRight and self.rect.right < self.screen_rect.right:   # Verificamos si la bandera de movimiento a la derecha se encuentra activa y que su posicion no salga de la pantalla
-            self.center += self.settings.shipSpeedFactor                    # Si la bandera de movimiento a la derecha se encuentra activa movemos la nave a la derecha
-        
-        if self.movingLeft and self.rect.left > 0:                          # Verificamos si la bandera de movimiento a la izquierda se encuentra activa y que su posicion no salga de la pantalla
-            self.center -= self.settings.shipSpeedFactor                    # Si la bandera de movimiento a la izquierda se encuentra activa movemos la nave a la izquierda
-
-        self.rect.centerx = self.center                                     # Aplicamos el movimiento para que este se muestre en pantalla
-
-    def blitme(self):                                                       # Metodo para posicionar la nave en su posicion actual
-        self.screen.blit(self.image, self.rect)                             # Posiciona la imagen en la pantalla para visualizarla
-        
+    def blitme(self):
+        # dibuja el eva en su ubicacion actual
+        self.pantalla.blit(self.imagen, self.rect)
