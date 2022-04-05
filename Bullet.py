@@ -1,31 +1,23 @@
 import pygame
 from pygame.sprite import Sprite
 
+class Bullet(Sprite):
+    """ Clase para disparar las balas desde la nave """
+    def __init__(self, settings, screen, ship):
+        super(Bullet, self).__init__()
+        self.screen = screen
 
-class Bala(Sprite):
-    # La clase sirve para manejar las balas didparadas por la nave
-    def __init__(self, configuraciones, pantalla, nave):
-        super(Bala, self).__init__()
-        self.pantalla = pantalla
+        self.rect = pygame.Rect(0, 0, settings.bulletWidth, settings.bulletHeight)     # Las balas no seran imagenes por lo tanto le asignamos una posicion en pantalla con el ancho y alto de la bala
+        self.rect.centerx = ship.rect.centerx                                          # Posicionamos las balas con repecto al centro de la nave
+        self.rect.top = ship.rect.top                                                  # Ubicamos las balas en el tope de la nave
 
-        # crea una bala rec  en (0,0) y luego establece la posicion correcta
-        self.rect = pygame.Rect(
-            0, 0, configuraciones.bala_width, configuraciones.bala_height)
-        self.rect.centery = nave.rect.centery
-        self.rect.right = nave.rect.right
+        self.y = float(self.rect.y)                                                    # Almacenamos la posicion y de la bala en decimal
+        self.color = settings.bulletColor                                              # Asignamos el color de la bala desde las configuraciones
+        self.speedFactor = settings.speedFactorBullet                                  # Asignamos la velocidad de la bala desde las configuraciones
+    
+    def update(self):                                                                  # Actualiza la posicion de la bala en la pantalla
+        self.y -= self.speedFactor                                                     # Actualiza la posicion decimal de la bala
+        self.rect.y = self.y                                                           # Actualiza la posicion de los pixeles en pantalla
 
-        # almacena la posicion de la bala como un float
-        self.x = float(self.rect.x)
-        self.color = configuraciones.bala_color
-        self.factor_velocidad = configuraciones.factor_velocidad_bala
-
-        # mueve la bala hacia la derecha
-    def update(self):
-        # Actualiza la posicion decimal de la bala
-        self.x += self.factor_velocidad
-        # Actualiza la posicion del rect
-        self.rect.x = self.x
-
-    # dibuja la bala en la pantalla
-    def draw_bala(self):
-        pygame.draw.rect(self.pantalla, self.color, self.rect)
+    def drawBullet(self):                                                              # Dibuja la bala en la pantalla
+        pygame.draw.rect(self.screen, self.color, self.rect)                           # Se muestra en pantalla la bala con el color, tamaño y posicion configurados

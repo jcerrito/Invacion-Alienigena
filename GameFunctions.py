@@ -1,88 +1,65 @@
 import sys
 import pygame
-from Bullet import Bala
-from Alien import Alien
+from Bullet import Bullet                                          # Importamos la clase Bullet
+from Alien import Alien                                            # Importamos la clase Alien
 
+def checkKeydownEvents(event, settings, screen, ship, bullets):    # Responde a las pulsaciones de la teclas
+    if event.key == pygame.K_RIGHT:                                # Comparamos el evento con la tecla de flecha derecha
+        ship.movingRight = True                                    # Si se cumple la condicion anterior la bandera de movimiento a la derecha se activa
+    elif event.key == pygame.K_LEFT:                               # Verificamos si la tecla presionada es: flecha a la izquierda
+        ship.movingLeft = True                                     # Si se cumple la condicion anterior la bandera de movimiento a la izquierda se activa
+    elif event.key == pygame.K_SPACE:                              # Verificamos si la tecla presionada es: tecla espacio
+        fireBullet(settings, screen, ship, bullets)                # Disparamos una bala si aun no se supera el limite
+    elif event.key == pygame.K_q:                                  # Verificamos si la tecla presionada es: tecla q
+        sys.exit()                                                 # Cerramos todos los procesos del juego que se encuentren ejecutando
 
-def eventos_keydonw(event, nave, configuraciones, pantalla, balas):
-    if event.key == pygame.K_UP:
-        nave.moving_up = True
-    elif event.key == pygame.K_DOWN:
-        nave.moving_down = True
-    elif event.key == pygame.K_SPACE:
-        # crea una nueva vala y la agrega al grupo de balas
-        disparar(balas, configuraciones, pantalla, nave)
+def checkKeyupEvents(event, ship):                                 # Detecta si se deja de presionar una tecla
+    if event.key == pygame.K_RIGHT:                                # Verificamos si la tecla que se soltó es la tecla de flecha derecha
+        ship.movingRight = False                                   # Si se cumple la condicion anterior la bandera de movimiento a la derecha se desactiva
+    elif event.key == pygame.K_LEFT:                               # Verifcamos si se deja de presionar la tecla flecha a la ezquierda
+        ship.movingLeft = False                                    # Si se cumple la condicion anterior la bandera de movimiento a la izquierda se desactiva
 
+def checkEvents(settings, screen, ship, bullets):                  # Metodo para responder a las pulsaciones de teclas y eventos del raton
+    for event in pygame.event.get():                               # Ciclo de eventos para controlar el juego
+        if event.type == pygame.QUIT:                              # Si el usuario da click en el boton de cierre de la ventana
+            sys.exit()                                             # Se cierra todo proceso y termina el juego
 
-def eventos_keyup(event, nave):
-    if event.key == pygame.K_UP:
-        nave.moving_up = False
-    elif event.key == pygame.K_DOWN:
-        nave.moving_down = False
+        elif event.type == pygame.KEYDOWN:                         # Si se detecta que se presiona una tecla cualquiera del teclado -> comienza a verificar qué tecla fue presionada
+            checkKeydownEvents(event,settings,screen,ship,bullets) # Realiza la acción que corresponde a la pulsacion de la tecla
 
+        elif event.type == pygame.KEYUP:                           # Verificamos si la tecla presionada ha sido soltada
+            checkKeyupEvents(event, ship)                          # Detiene la accion ejecutada por la tecla presionada
 
-def verificar_eventos(configuraciones, pantalla, nave, balas):
-    # responde a las pulsaciones de las teclas y los eventos del raton
-    # Escucha eventos del trclado o del raton
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-        elif event.type == pygame.KEYDOWN:
-            eventos_keydonw(event, nave, configuraciones, pantalla, balas)
-        elif event.type == pygame.KEYUP:
-            eventos_keyup(event, nave)
+def refreshScreen(settings, screen, ship, aliens, bullets):        # Metodo que actualiza las imagenes en la pantalla durante la ejecución
+    screen.fill(settings.bg_color)                                 # Dibujamos la pantalla en cada ciclo asignando el color de fondo
+    
+    for bullet in bullets.sprites():                               # Obtenemos todas las balas que han sido disparadas
+        bullet.drawBullet()                                        # Dibujamos cada una de estas balas en la pantalla
 
+    ship.blitme()                                                  # Dibujamos la nave en pantalla
+    aliens.draw(screen)                                            # Dibujamos cada uno de los aliens en pantalla
+    pygame.display.flip()                                          # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
 
-def actualizar_pantalla(fondo, pantalla, nave, aliens, balas):
-    # Actualiza las imagenes en la pantalla y pasa a la nueva pantalla
-    # esto es para volver a dibijar la pantalla por cada iteracion en el bucle while
-    pantalla.blit(fondo, [0, 0])
-    #pantalla.fill((226, 226, 226))
-    # Vuelve a dibujar todas las balas detras de la nave y de los extraterrestres
-    for bala in balas.sprites():
-        bala.draw_bala()
-    nave.blitme()
-    aliens.draw(pantalla)
-    # Hacemos visible la pnatalla mas reciente
-    pygame.display.flip()
+def updateBullets(bullets):                                        # Actualiza la posicion de las balas en pantalla y elimina las que salen de esta
+    bullets.update()                                               # Actualizamos los valores para cada bala durante la ejecucion
+        
+    for bullet in bullets.copy():                                  # Checamos cada una de las balas disparadas
+        if bullet.rect.bottom <= 0:                                # Verificamos si la posicion de la bala con respecto a la pantalla alcanza un valor cero
+            bullets.remove(bullet)                                 # Si la condicion anterior se cumple, removemos la bala antes de que salga de pantalla
 
-# actualiza las balas
+def fireBullet(settings, screen, ship, bullets):                   # Dispara una bala si no ha alcanzado el limte
+    if len(bullets) < settings.bulletsAllowed:                     # Si el numero de balas disparadas es menor al permitido
+        newBullet = Bullet(settings, screen, ship)                 # Creamos una nueva bala
+        bullets.add(newBullet)                                     # Agregamos las balas a la pantalla
 
+def createFleet(settings, screen, aliens):                         # Crea una flota completa de aliens
+    alien = Alien(settings, screen)                                # Creamos un nuevo alien
+    alienWidth = alien.rect.width                                  # Asignamos el ancho de la imagen del alien
+    availableSpaceX = settings.screen_width - 2 * alienWidth       # Calculamos el espacio disponible del eje x en pantalla
+    aliensNumberX = int(availableSpaceX / (2 * alienWidth))        # Calculamos cuantas naves caben dentro a lo ancho de la pantalla
 
-def update_balas(balas):
-    for bala in balas.copy():
-        if bala.rect.right == 1350:
-            balas.remove(bala)
-
-# dispara una bala si aun no alcanza el limite
-
-
-def disparar(balas, configuraciones, pantalla, nave):
-    if len(balas) < configuraciones.balas_allowed:
-        nueva_bala = Bala(configuraciones, pantalla, nave)
-        balas.add(nueva_bala)
-
-# Crea flota
-
-
-def crear_flota(configuraciones, pantalla, aliens):
-    alien = Alien(configuraciones, pantalla)
-    alien_width = alien.rect.width
-    number_aliens_y = get_number_alines_y(configuraciones, alien_width)
-    # crea la primra fila de aliens
-    for alien_number in range(number_aliens_y):
-        crear_alien(configuraciones, pantalla,
-                    alien_width, alien_number, aliens)
-
-
-def get_number_alines_y(configuraciones, alien_width):
-    avialable_space_y = configuraciones.screen_width - 2 * alien_width
-    number_aliens_y = int(avialable_space_y / (2 * alien_width))
-    return number_aliens_y
-
-
-def crear_alien(configuraciones, pantalla, alien_width, alien_number, aliens):
-    alien = Alien(configuraciones, pantalla)
-    alien.y = alien_width + 2 * alien_width * alien_number
-    alien.rect.y = alien.y
-    aliens.add(alien)
+    for aliensNumber in range(aliensNumberX):                      # Creamos la primera fila de aliens
+        newAlien = Alien(settings, screen)                         # Se crea cada uno de los aliens para asignar su posicion en la fila
+        newAlien.x = alienWidth + 2 * alienWidth * aliensNumber    # Calculamos con la posicion en x de cada alien en pantalla
+        newAlien.rect.x = newAlien.x
+        aliens.add(newAlien)                                       # Agregamos cada una de las posiciones al grupo de aliens
