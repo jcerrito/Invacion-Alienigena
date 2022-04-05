@@ -52,14 +52,21 @@ def fireBullet(settings, screen, ship, bullets):                   # Dispara una
         newBullet = Bullet(settings, screen, ship)                 # Creamos una nueva bala
         bullets.add(newBullet)                                     # Agregamos las balas a la pantalla
 
-def createFleet(settings, screen, aliens):                         # Crea una flota completa de aliens
-    alien = Alien(settings, screen)                                # Creamos un nuevo alien
-    alienWidth = alien.rect.width                                  # Asignamos el ancho de la imagen del alien
+def getAliensNumberX(settings, alienWidth):                        # Metodo para definir la cantidad de aliens en el eje x
     availableSpaceX = settings.screen_width - 2 * alienWidth       # Calculamos el espacio disponible del eje x en pantalla
     aliensNumberX = int(availableSpaceX / (2 * alienWidth))        # Calculamos cuantas naves caben dentro a lo ancho de la pantalla
+    return aliensNumberX                                           # Returnamos el numero de aliens que pueden ser colocados en el eje x
+
+def createAlien(settings, screen, aliens, aliensNumber):           # Metodo para crear un alien
+    newAlien = Alien(settings, screen)                             # Se crea cada uno de los aliens para asignar su posicion en la fila
+    alienWidth = newAlien.rect.width                               # Cargamos el ancho del alien
+    newAlien.x = alienWidth + 2 * alienWidth * aliensNumber        # Calculamos con la posicion en x de cada alien en pantalla
+    newAlien.rect.x = newAlien.x                                   # Asignamox la posicion en x para cada uno e los alien que se crea
+    aliens.add(newAlien)                                           # Agregamos cada una de las posiciones al grupo de aliens
+
+def createFleet(settings, screen, aliens):                         # Crea una flota completa de aliens
+    alien = Alien(settings, screen)                                # Creamos un nuevo alien
+    aliensNumberX = getAliensNumberX(settings, alien.rect.width)   # Asignamos el numero de aliens en x
 
     for aliensNumber in range(aliensNumberX):                      # Creamos la primera fila de aliens
-        newAlien = Alien(settings, screen)                         # Se crea cada uno de los aliens para asignar su posicion en la fila
-        newAlien.x = alienWidth + 2 * alienWidth * aliensNumber    # Calculamos con la posicion en x de cada alien en pantalla
-        newAlien.rect.x = newAlien.x
-        aliens.add(newAlien)                                       # Agregamos cada una de las posiciones al grupo de aliens
+        createAlien(settings, screen, aliens, aliensNumber)        # Creamos cada uno de los aliens de acuerdo al ancho de la pantalla 
