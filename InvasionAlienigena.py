@@ -21,7 +21,7 @@ def run_game():                                                                 
     while True:                                                                             # Bucle de activacion de juego
         gameFunctions.checkEvents(settings, screen, ship, bullets)                          # Detectar eventos del teclado o raton. Metodo traido desde GameFunctions
         ship.update()                                                                       # Actualizamos los valores de la nave durante la ejecucion
-        gameFunctions.updateBullets(bullets)                                                # Actualizamos las balas disparadas con respecto a la pantalla
+        gameFunctions.updateBullets(settings, screen, ship, bullets, aliens)                # Actualizamos las balas disparadas con respecto a la pantalla
         gameFunctions.updateAliens(settings, aliens)                                        # Actializamos la flota de aliens con respecto a la pantalla
         gameFunctions.refreshScreen(settings, screen, ship, aliens, bullets)                # Actualizamos las imagenes en pantalla durante la ejecucion
 

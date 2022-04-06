@@ -42,12 +42,17 @@ def refreshScreen(settings, screen, ship, aliens, bullets):                     
     aliens.draw(screen)                                                                   # Dibujamos cada uno de los aliens en pantalla
     pygame.display.flip()                                                                 # Indica a pygame que dibuje una nueva pantalla y actualiza los espacios
                     
-def updateBullets(bullets):                                                               # Actualiza la posicion de las balas en pantalla y elimina las que salen de esta
+def updateBullets(settings, screen, ship, bullets, aliens):                                                       # Actualiza la posicion de las balas en pantalla y elimina las que salen de esta
     bullets.update()                                                                      # Actualizamos los valores para cada bala durante la ejecucion
                             
     for bullet in bullets.copy():                                                         # Checamos cada una de las balas disparadas
         if bullet.rect.bottom <= 0:                                                       # Verificamos si la posicion de la bala con respecto a la pantalla alcanza un valor cero
             bullets.remove(bullet)                                                        # Si la condicion anterior se cumple, removemos la bala antes de que salga de pantalla
+        
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    if len(aliens) == 0:
+        bullets.empty()
+        createFleet(settings, screen, ship, aliens)
                     
 def fireBullet(settings, screen, ship, bullets):                                          # Dispara una bala si no ha alcanzado el limte
     if len(bullets) < settings.bulletsAllowed:                                            # Si el numero de balas disparadas es menor al permitido
