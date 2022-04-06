@@ -33,6 +33,7 @@ def checkEvents(settings, screen, ship, bullets):                               
                     
 def refreshScreen(settings, screen, ship, aliens, bullets):                               # Metodo que actualiza las imagenes en la pantalla durante la ejecución
     screen.fill(settings.bg_color)                                                        # Dibujamos la pantalla en cada ciclo asignando el color de fondo
+    #screen.blit(settings.background, (0,0))
                         
     for bullet in bullets.sprites():                                                      # Obtenemos todas las balas que han sido disparadas
         bullet.drawBullet()                                                               # Dibujamos cada una de estas balas en la pantalla
@@ -68,7 +69,7 @@ def createAlien(settings, screen, aliens, aliensNumber, rowNumber):             
     alienWidth = newAlien.rect.width                                                      # Cargamos el ancho del alien
     newAlien.x = alienWidth + 2 * alienWidth * aliensNumber                               # Calculamos con la posicion en x de cada alien en pantalla
     newAlien.rect.x = newAlien.x                                                          # Asignamox la posicion en x para cada uno e los alien que se crea
-    newAlien.rect.y = newAlien.rect.height + 2 * newAlien.rect.height * rowNumber         #
+    newAlien.rect.y = newAlien.rect.height + 2 * newAlien.rect.height * rowNumber         # Calculamos la posicion en la que se va ubicar cada alien
     aliens.add(newAlien)                                                                  # Agregamos cada una de las posiciones al grupo de aliens
                     
 def createFleet(settings, screen, aliens):                                                # Crea una flota completa de aliens
@@ -79,4 +80,19 @@ def createFleet(settings, screen, aliens):                                      
     
     for rowNumber in range(rowsNumber):                                                   # Ciclo para crear cada una de las filas con aliens
         for aliensNumber in range(aliensNumberX):                                         # Creamos la cada fila de aliens
-            createAlien(settings, screen, aliens, aliensNumber, rowNumber)                # Creamos cada uno de los aliens de acuerdo al ancho de la pantalla 
+            createAlien(settings, screen, aliens, aliensNumber, rowNumber)                # Creamos cada uno de los aliens de acuerdo al ancho de la pantalla
+
+def checkFleetEdges(settings, aliens):                                                    # Si el alien llega al borde responde para cambiar de direccion
+    for alien in aliens.sprites():                                                        # Recorremos toda la flota de aliens
+        if alien.checkEdges():                                                            # Si un alienigena esta en el borde
+            changeFleetDirections(settings, aliens)                                       # Cambiamos su direccion
+            break                                                                         # Terminamos el proceso
+
+def changeFleetDirections(settings, aliens):                                              # Cambia la direccion de la flota de aliens
+    for alien in aliens.sprites():                                                        # Recorremos toda la flota de aliens 
+        alien.rect.y += settings.fleetDropSpeed                                           # Movemos la flota de aliens hacia abaajo
+        settings.fleetDirection *= -1                                                     # Para mover la flota de aliens restamos en 1 la posicion de y de cada alien
+
+def updateAliens(settings, aliens):                                                       # Actualiza la posicion en pantalla de todos los aliens en la flota
+    checkFleetEdges(settings, aliens)                                                     # Checamos los bordes para saber si un alien esta cerca
+    aliens.update()                                                                       # Actializamos la posicion del alien en pantalla
