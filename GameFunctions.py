@@ -48,12 +48,15 @@ def updateBullets(settings, screen, ship, bullets, aliens):                     
     for bullet in bullets.copy():                                                         # Checamos cada una de las balas disparadas
         if bullet.rect.bottom <= 0:                                                       # Verificamos si la posicion de la bala con respecto a la pantalla alcanza un valor cero
             bullets.remove(bullet)                                                        # Si la condicion anterior se cumple, removemos la bala antes de que salga de pantalla
-        
-    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
-    if len(aliens) == 0:
-        bullets.empty()
-        createFleet(settings, screen, ship, aliens)
-                    
+    
+    checkBulletAlienCollisions(settings, screen, ship, aliens, bullets)                   # Responde a la colision entre las balas de la nave y los aliens
+
+def checkBulletAlienCollisions(settings, screen, ship, aliens, bullets):                  # Responde a la colision entre las balas de la nave y los aliens
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)                  # Detectamos si un alien es alcanzado por las balas
+    if len(aliens) == 0:                                                                  # Si la cantidad de aliens es cero
+        bullets.empty()                                                                   # Eliminamos el grupo de balas
+        createFleet(settings, screen, ship, aliens)                                       # Y creamos una flota nueva con aliens
+
 def fireBullet(settings, screen, ship, bullets):                                          # Dispara una bala si no ha alcanzado el limte
     if len(bullets) < settings.bulletsAllowed:                                            # Si el numero de balas disparadas es menor al permitido
         newBullet = Bullet(settings, screen, ship)                                        # Creamos una nueva bala
